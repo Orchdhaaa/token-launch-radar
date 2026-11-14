@@ -10,7 +10,7 @@
 //
 // Usage:  MAKEFUN_OUTPUT_DIR=out node main.ts --input path/to/snapshot.json
 
-import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, existsSync, readdirSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-board.ts';
@@ -240,15 +240,20 @@ function farmSteps(p: Protocol): string[] {
 
 // ------------------------------------------------------------------ main
 
-function parseInputArg(argv: string[]): string {
-  const i = argv.indexOf('--input');
-  if (i >= 0 && argv[i + 1]) return argv[i + 1];
-  return '/input/snapshot.json';
+/** --name <value> out of the arguments, or the fallback. Matches the starter kit. */
+function arg(name: string, fallback: string): string {
+  const at = process.argv.indexOf(`--${name}`);
+  if (at >= 0 && at + 1 < process.argv.length) return process.argv[at + 1]!;
+  const withEquals = process.argv.find((a) => a.startsWith(`--${name}=`));
+  return withEquals === undefined ? fallback : withEquals.slice(name.length + 3);
 }
 
 function main(): void {
-  const inputPath = resolve(parseInputArg(process.argv.slice(2)));
-  const outDir = resolve(process.env.MAKEFUN_OUTPUT_DIR ?? './out');
+  // Input: --input <file|dir>, default '/input' (a directory resolves to snapshot.json inside).
+  const inputArg = arg('input', '/input');
+  const inputPath = resolve(inputArg.endsWith('.json') ? inputArg : join(inputArg, 'snapshot.json'));
+  // Output: --output <dir>, then MAKEFUN_OUTPUT_DIR, then '/output' (the starter contract).
+  const outDir = resolve(arg('output', process.env.MAKEFUN_OUTPUT_DIR ?? '/output'));
   const snap = JSON.parse(readFileSync(inputPath, 'utf8')) as Snapshot;
 
   const watch = new Set(snap.watchlist);
@@ -347,8 +352,13 @@ function main(): void {
     rows,
   };
 
-  // ---- write the output directory (wiped first, so two runs agree byte for byte)
-  rmSync(outDir, { recursive: true, force: true });
+  // ---- write the output directory (contents wiped first, so two runs agree byte for byte;
+  // the directory itself is kept, so a mounted /output stays usable)
+  if (existsSync(outDir)) {
+    for (const name of readdirSync(outDir)) {
+      rmSync(join(outDir, name), { recursive: true, force: true });
+    }
+  }
   mkdirSync(join(outDir, 'dashboard'), { recursive: true });
   mkdirSync(join(outDir, 'screenshots'), { recursive: true });
   writeFileSync(join(outDir, 'board.json'), JSON.stringify(board, null, 2) + '\n', 'utf8');
