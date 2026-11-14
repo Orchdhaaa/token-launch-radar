@@ -1,0 +1,123 @@
+:root{
+  --bg:#0a0f1c; --panel:#101a2e; --panel2:#0d1526; --line:#1e2c47; --line2:#27395c;
+  --ink:#e6ecf5; --muted:#8fa1bd; --faint:#64748f;
+  --green:#2ee6a8; --green-dim:#123f31; --amber:#f5b942; --red:#f26d6d; --cyan:#57c8f2;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html{color-scheme:dark}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1{font-size:26px; letter-spacing:.14em; margin:0 0 4px; font-weight:800}
+h2{font-size:17px; margin:0 0 10px; letter-spacing:.02em}
+a{color:var(--green)}
+.top{
+  display:flex; gap:18px; align-items:flex-start;
+  padding:26px 28px 18px; border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#0e1830 0%,#0a0f1c 100%);
+}
+.tagline{margin:0 0 6px; color:var(--muted); font-size:15px; max-width:640px}
+.meta{margin:0; color:var(--faint); font-size:12.5px}
+.head-note{
+  margin-left:auto; max-width:340px; font-size:12.5px; color:var(--muted);
+  border:1px solid var(--line); border-left:3px solid var(--amber);
+  background:var(--panel2); border-radius:8px; padding:10px 12px;
+}
+.radar-dot{
+  flex:0 0 auto; width:54px; height:54px; border-radius:50%; margin-top:2px;
+  border:1px solid var(--line2); position:relative; overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(46,230,168,.28) 0 2px, transparent 3px),
+    repeating-radial-gradient(circle at 50% 50%, transparent 0 12px, rgba(87,200,242,.14) 12px 13px),
+    #0d1526;
+}
+.radar-dot::after{
+  content:""; position:absolute; inset:0; border-radius:50%;
+  background:conic-gradient(from 0deg, rgba(46,230,168,.55), transparent 22%);
+  animation:sweep 4s linear infinite;
+}
+.radar-dot span{position:absolute; width:7px; height:7px; border-radius:50%; background:var(--green); left:34px; top:14px; box-shadow:0 0 8px var(--green)}
+@keyframes sweep{to{transform:rotate(360deg)}}
+.stats{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:12px;
+  padding:18px 28px 0;
+}
+.stat{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  padding:14px 16px;
+}
+.stat b{display:block; font-size:22px; font-weight:800; letter-spacing:-.01em}
+.stat b small{font-size:13px; color:var(--muted); font-weight:600}
+.stat span{font-size:12.5px; color:var(--muted)}
+.stat.hot b{color:var(--green)}
+.panel{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--radius);
+  margin:16px 28px; padding:16px 18px;
+}
+.controls{display:flex; flex-wrap:wrap; gap:12px 16px; align-items:end}
+.controls label{font-size:12.5px; color:var(--muted); display:flex; flex-direction:column; gap:5px}
+.controls label.check{flex-direction:row; align-items:center; gap:7px; padding-bottom:7px; color:var(--ink); cursor:pointer}
+input[type=search],select{
+  background:var(--panel2); color:var(--ink); border:1px solid var(--line2);
+  border-radius:8px; padding:8px 10px; font:inherit; font-size:14px; min-width:170px;
+}
+input[type=search]{min-width:220px}
+input[type=search]:focus,select:focus{outline:2px solid var(--green); outline-offset:1px; border-color:var(--green)}
+input[type=checkbox]{accent-color:var(--green); width:16px; height:16px}
+.count{margin-left:auto; font-size:13px; color:var(--muted); padding-bottom:8px}
+.table-wrap{overflow-x:auto; border-radius:8px}
+table{width:100%; border-collapse:collapse; font-size:14px; min-width:760px}
+thead th{
+  text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.07em;
+  color:var(--muted); padding:10px 12px; border-bottom:1px solid var(--line2);
+  position:sticky; top:0; background:var(--panel); white-space:nowrap;
+}
+tbody td{padding:10px 12px; border-bottom:1px solid var(--line); vertical-align:top}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:#14213a}
+tbody tr.sel{background:#12283f}
+td.num,th.num{text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap}
+td.rank{color:var(--faint); font-weight:700}
+td .pname{font-weight:700}
+td .pslug{color:var(--faint); font-size:12px}
+.up{color:var(--green)} .down{color:var(--red)} .flat{color:var(--muted)}
+.badge{
+  display:inline-block; font-size:11px; font-weight:700; letter-spacing:.04em;
+  padding:3px 8px; border-radius:20px; white-space:nowrap;
+}
+.badge.pre{background:var(--green-dim); color:var(--green)}
+.badge.watch{background:#3a2f10; color:var(--amber); margin-left:5px}
+.hint{color:var(--faint); font-size:12.5px; margin:12px 2px 0}
+.detail-empty{color:var(--faint); margin:4px 0}
+.detail h2{font-size:21px; margin:2px 0 4px}
+.detail .sub{color:var(--muted); margin:0 0 14px; font-size:13.5px}
+.dgrid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:0 0 16px}
+.dgrid div{background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:10px 12px}
+.dgrid span{display:block; font-size:11.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em}
+.dgrid b{font-size:16px; font-variant-numeric:tabular-nums}
+.model{width:100%; font-size:13.5px; margin:0 0 16px}
+.model td{border-bottom:1px solid var(--line); padding:7px 10px}
+.model td:last-child{text-align:right; font-variant-numeric:tabular-nums}
+.steps{margin:0; padding-left:22px}
+.steps li{margin:0 0 10px; padding-left:4px}
+.steps li::marker{color:var(--green); font-weight:800}
+.method{color:var(--muted); font-size:13.5px}
+.method-list{margin:0; padding-left:20px; color:var(--muted)}
+.method-list li{margin:0 0 10px}
+.method-list strong{color:var(--ink)}
+footer{padding:6px 28px 26px; color:var(--faint); font-size:12.5px}
+body.detail-mode .stats,body.detail-mode .controls,body.detail-mode .board-panel{display:none}
+body.detail-mode main .detail{margin-top:16px}
+.backlink{margin:0 0 12px}
+.backlink a{color:var(--green); text-decoration:none; font-weight:700; font-size:13.5px}
+@media (max-width:900px){
+  .top{flex-direction:column; padding:20px}
+  .head-note{margin-left:0; max-width:none}
+  .stats{grid-template-columns:repeat(2,1fr); padding:14px 20px 0}
+  .panel{margin:12px 20px}
+  .dgrid{grid-template-columns:repeat(2,1fr)}
+  h1{font-size:22px}
+}
